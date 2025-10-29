@@ -11,154 +11,231 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Risk Management Tool — Header</title>
-<style>
-  /* ---------- Reset / Grund ---------- */
-  :root{
-    --bg: #f7f8fb;
-    --card: #ffffff;
-    --text: #111;
-    --muted: #6b7280;
-    --accent: #007aff;
-    --glass: rgba(255,255,255,0.6);
-    --shadow: 0 6px 20px rgba(16,24,40,0.08);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risk Management Tool</title>
 
-  /* ---------- Fixed Header ---------- */
-  .site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 64px;                     /* angenehme Höhe für mobile & desktop */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 18px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.80));
-    backdrop-filter: blur(6px);
-    box-shadow: var(--shadow);
-    border-bottom: 1px solid rgba(16,24,40,0.04);
-    z-index: 1000;
-  }
+  <style>
+    /* ===============================
+       🌈 APPLE-STYLE DESIGN
+    =============================== */
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+      background-color: #f8f8f8;
+      color: #1c1c1e;
+    }
 
-  /* Link / Title (links) */
-  .site-header .brand {
-    display:flex;
-    align-items:center;
-    gap:12px;
-    text-decoration: none;
-    color: inherit;
-  }
-  .brand .logo {
-    width:40px;
-    height:40px;
-    border-radius:8px;
-    background: linear-gradient(135deg,#f0f6ff,#e6f3ff);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-shadow: 0 4px 14px rgba(2,6,23,0.06);
-    font-weight:700;
-    color:var(--accent);
-    font-size:16px;
-    letter-spacing:0.5px;
-  }
-  .brand .title {
-    font-size:18px;
-    font-weight:600;
-    line-height:1;
-  }
-  .brand .subtitle {
-    font-size:12px;
-    color:var(--muted);
-    margin-top:2px;
-    display:block;
-  }
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      z-index: 100;
+    }
 
-  /* Avatar (rechts) */
-  .avatar-btn {
-    width:44px;
-    height:44px;
-    border-radius:12px;
-    background:linear-gradient(180deg,#ffffff,#f3f6fb);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid rgba(16,24,40,0.05);
-    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
-    cursor:pointer;
-  }
-  .avatar-btn img {
-    width:28px;
-    height:28px;
-    border-radius:6px;
-    object-fit:cover;
-    display:block;
-  }
-  .avatar-btn:active { transform: scale(0.98); }
+    header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
 
-  /* Space for page content so header doesn't cover it */
-  main{ padding-top: 90px; max-width:980px; margin: 24px auto; }
+    header h1:hover {
+      color: #0071e3;
+    }
 
-  /* Responsive tweaks */
-  @media (max-width:420px){
-    .site-header { height:56px; padding: 0 12px; }
-    .brand .title { font-size:16px; }
-    .brand .logo { width:36px; height:36px; font-size:14px; border-radius:9px; }
-    .avatar-btn { width:40px; height:40px; }
-  }
-</style>
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0071e3, #00c6ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .avatar::before {
+      content: "👤";
+      font-size: 18px;
+      color: white;
+    }
+
+    main {
+      padding-top: 80px;
+      text-align: center;
+    }
+
+    .status-box {
+      margin-top: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      display: inline-block;
+      text-align: left;
+    }
+
+    .status-box p {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #0071e3;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #005bb5;
+    }
+  </style>
 </head>
+
 <body>
-
-  <!-- Fixed Header -->
-  <header class="site-header" role="banner" aria-label="Seitenkopf">
-    <a class="brand" href="#calculator" title="Zurück zum Kalkulator" onclick="goCalculator(event)">
-      <div class="logo" aria-hidden="true">RM</div>
-      <div>
-        <div class="title">Risk Management Tool</div>
-        <span class="subtitle">Kalkulator</span>
-      </div>
-    </a>
-
-    <button class="avatar-btn" aria-label="Profil öffnen" onclick="openProfile()">
-      <!-- Einfaches Avatar-Icon (SVG) -->
-      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23011' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' /><circle cx='12' cy='7' r='4' /></svg>" alt="Avatar">
-    </button>
+  <!-- ===============================
+       HEADER
+  =============================== -->
+  <header>
+    <h1 onclick="goHome()">Risk Management Tool</h1>
+    <div class="avatar" onclick="openProfile()"></div>
   </header>
 
-  <!-- Beispiel-Hauptbereich -->
   <main>
-    <h2 style="margin-top:0;font-weight:600;">Demo-Inhalt</h2>
-    <p style="color:#444;">Hier ist der Seiteninhalt. Der Header bleibt oben fixiert — klicke links auf den Titel, um zurück zum Kalkulator zu springen, oder rechts auf das Avatar-Icon, um das Profil zu öffnen.</p>
+    <h2>Welcome to your Dashboard</h2>
 
-    <div style="margin-top:20px;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.04);">
-      <p style="margin:0;color:#333;">Füge hier deinen Kalkulator-Container ein (z. B. das bestehende Tool). Das <strong>main</strong> Element hat automatisch genügend Abstand, damit der Header nichts verdeckt.</p>
+    <div class="status-box">
+      <p><strong>Aktiver Benutzer:</strong> <span id="userName">–</span></p>
+      <p><strong>Kontostand:</strong> <span id="userBalance">–</span></p>
+      <button onclick="createDemoUser()">🧩 Demo-User erstellen</button>
     </div>
   </main>
 
-<script>
-  function goCalculator(e){
-    // Standardlink (ersetze '#calculator' durch ID oder URL deines Kalkulators)
-    // Wenn du eine bestimmte ID auf der Seite hast, du kannst scrollIntoView aufrufen:
-    // document.querySelector('#calculator').scrollIntoView({behavior:'smooth'});
-    // Hier Default: Verhindere wenn du Anchors anders handhaben willst:
-    // e.preventDefault();
-    console.log('Zurück zum Kalkulator (ersetze ggf. die Funktion goCalculator mit deiner Navigation).');
-  }
+  <!-- ===============================
+       JAVASCRIPT – STATE MANAGEMENT
+  =============================== -->
+  <script>
+    const STORAGE_KEY = 'riskToolState';
 
-  function openProfile(){
-    // Öffnet Profil-Dashboard — hier Platzhalter
-    // Ersetze mit navigation zur Profilseite oder Modal-Öffnung
-    window.location.href = '#profile';
-  }
-</script>
+    // 📥 State laden
+    function loadState() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return { users: {}, activeUser: null };
+        const parsed = JSON.parse(stored);
+        if (!parsed.users) parsed.users = {};
+        if (!parsed.activeUser) parsed.activeUser = null;
+        return parsed;
+      } catch (err) {
+        console.error('Fehler beim Laden des States:', err);
+        return { users: {}, activeUser: null };
+      }
+    }
 
+    // 💾 State speichern
+    function saveState(state) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (err) {
+        console.error('Fehler beim Speichern des States:', err);
+      }
+    }
+
+    // ➕ Benutzer erstellen
+    function createUser(name, startBalance = 0) {
+      const state = loadState();
+      if (state.users[name]) {
+        console.warn(`Benutzer "${name}" existiert bereits.`);
+        return state;
+      }
+
+      state.users[name] = {
+        name,
+        balance: Number(startBalance) || 0,
+        trades: []
+      };
+
+      state.activeUser = name;
+      saveState(state);
+      updateUI();
+      return state;
+    }
+
+    // 🔁 Aktiven Benutzer setzen
+    function setActiveUser(name) {
+      const state = loadState();
+      if (!state.users[name]) {
+        console.warn(`Benutzer "${name}" existiert nicht.`);
+        return state;
+      }
+
+      state.activeUser = name;
+      saveState(state);
+      updateUI();
+      return state;
+    }
+
+    // 🔍 Aktiven Benutzer abrufen
+    function getActiveUser() {
+      const state = loadState();
+      if (!state.activeUser) return null;
+      return state.users[state.activeUser] || null;
+    }
+
+    // 🧹 Alles löschen
+    function clearState() {
+      localStorage.removeItem(STORAGE_KEY);
+      console.log('✅ Alle Benutzerdaten gelöscht.');
+      updateUI();
+    }
+
+    // 🔧 UI aktualisieren
+    function updateUI() {
+      const user = getActiveUser();
+      document.getElementById('userName').textContent = user ? user.name : '–';
+      document.getElementById('userBalance').textContent = user ? user.balance.toFixed(2) + ' €' : '–';
+    }
+
+    // 🌐 Navigation (noch Dummy)
+    function goHome() {
+      alert("Zurück zum Kalkulator (noch nicht verlinkt).");
+    }
+
+    function openProfile() {
+      alert("Profil-Dashboard öffnen (noch nicht implementiert).");
+    }
+
+    // 🧩 Demo-Button
+    function createDemoUser() {
+      createUser("Erik", 10000);
+    }
+
+    // Beim Start UI laden
+    updateUI();
+  </script>
 </body>
 </html>
 <script></script>
