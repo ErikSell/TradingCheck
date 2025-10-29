@@ -11,57 +11,49 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>TradingCheck — Kalkulator & Trading Log</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradingCheck</title>
 <style>
-  :root{
-    --bg:#f7f8fb;--card:#fff;--muted:#6b7280;
-    --accent:#0071e3;--success:#00b341;--danger:#e63946;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:#111;}
-  header{position:fixed;top:0;left:0;right:0;height:64px;
-    display:flex;align-items:center;justify-content:space-between;
-    background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);
-    border-bottom:1px solid rgba(0,0,0,0.06);padding:0 20px;z-index:1000;}
-  .logo{font-size:20px;font-weight:700;cursor:pointer;}
-  .logo .c{color:var(--accent);}
-  .avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00c6ff);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;cursor:pointer;}
-  main{padding-top:90px;max-width:1100px;margin:0 auto;padding:0 20px;}
-  .calculator-panel{background:var(--card);padding:26px;border-radius:14px;
-    box-shadow:0 12px 30px rgba(2,6,23,0.04);max-width:760px;margin-top:15px;}
-  .calculator-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-  .full{grid-column:1/-1;}
-  label{display:block;margin-bottom:6px;font-weight:600;}
-  input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #e6e6e9;
-    font-size:16px;background:#fbfbfd;}
-  textarea{resize:vertical;min-height:60px;}
-  .btn{padding:12px 16px;border-radius:10px;border:none;font-weight:700;font-size:16px;cursor:pointer;}
-  .btn.primary{background:var(--accent);color:#fff;}
-  .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(0,113,227,0.12);}
-  .results{margin-top:18px;background:#fbfdff;border-radius:10px;padding:14px;border-left:4px solid rgba(0,113,227,0.12);}
-  .result-line{display:flex;justify-content:space-between;padding:6px 0;}
-  .value.red{color:var(--danger);font-weight:700;} .value.green{color:var(--success);font-weight:700;}
-  .muted{color:var(--muted);font-size:13px;}
-  /* Drawer */
-  .profile-drawer{position:fixed;top:0;right:-420px;width:420px;height:100%;
-    background:rgba(255,255,255,0.98);backdrop-filter:blur(8px);
-    box-shadow:-14px 0 40px rgba(2,6,23,0.08);transition:right .3s ease;z-index:1500;
-    display:flex;flex-direction:column;}
-  .profile-drawer.open{right:0;}
-  .drawer-header{padding:22px;font-weight:700;font-size:18px;border-bottom:1px solid rgba(0,0,0,0.06);
-    display:flex;justify-content:space-between;}
-  .tabs{display:flex;border-bottom:1px solid rgba(0,0,0,0.06);}
-  .tab{flex:1;text-align:center;padding:14px;cursor:pointer;font-weight:600;color:#666;}
-  .tab.active{color:var(--accent);border-bottom:3px solid var(--accent);}
-  .drawer-body{flex:1;overflow:auto;padding:18px;}
-  .overview,.tradelog{display:none;}
-  .tab-content.active{display:block;}
-  .history-list{margin-top:10px;font-size:13px;color:#333;border-top:1px solid #eee;padding-top:8px;}
-  .trade-entry{border:1px solid #eee;border-radius:10px;padding:10px;margin-top:10px;background:#fafafa;}
-  @media(max-width:480px){.profile-drawer{width:100%;right:-100%;}}
+:root{
+  --bg:#f7f8fb;--card:#fff;--muted:#6b7280;
+  --accent:#0071e3;--success:#00b341;--danger:#e63946;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:#111;}
+header{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(0,0,0,0.06);padding:0 20px;z-index:1000;}
+.logo{font-size:20px;font-weight:700;cursor:pointer;}
+.logo .c{color:var(--accent);}
+.avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00c6ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;cursor:pointer;}
+main{padding-top:90px;max-width:1100px;margin:0 auto;padding:0 20px;}
+.calculator-panel{background:var(--card);padding:26px;border-radius:14px;box-shadow:0 12px 30px rgba(2,6,23,0.04);max-width:760px;margin-top:15px;}
+.calculator-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.full{grid-column:1/-1;}
+label{display:block;margin-bottom:6px;font-weight:600;}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #e6e6e9;font-size:16px;background:#fbfbfd;}
+textarea{resize:vertical;min-height:60px;}
+.btn{padding:12px 16px;border-radius:10px;border:none;font-weight:700;font-size:16px;cursor:pointer;}
+.btn.primary{background:var(--accent);color:#fff;}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(0,113,227,0.12);}
+.results{margin-top:18px;background:#fbfdff;border-radius:10px;padding:14px;border-left:4px solid rgba(0,113,227,0.12);}
+.result-line{display:flex;justify-content:space-between;padding:6px 0;}
+.value.red{color:var(--danger);font-weight:700;} .value.green{color:var(--success);font-weight:700;}
+.muted{color:var(--muted);font-size:13px;}
+.profile-drawer{position:fixed;top:0;right:-420px;width:420px;height:100%;background:rgba(255,255,255,0.98);backdrop-filter:blur(8px);box-shadow:-14px 0 40px rgba(2,6,23,0.08);transition:right .3s ease;z-index:1500;display:flex;flex-direction:column;}
+.profile-drawer.open{right:0;}
+.drawer-header{padding:22px;font-weight:700;font-size:18px;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;justify-content:space-between;}
+.tabs{display:flex;border-bottom:1px solid rgba(0,0,0,0.06);}
+.tab{flex:1;text-align:center;padding:14px;cursor:pointer;font-weight:600;color:#666;}
+.tab.active{color:var(--accent);border-bottom:3px solid var(--accent);}
+.drawer-body{flex:1;overflow:auto;padding:18px;}
+.overview,.tradelog{display:none;}
+.tab-content.active{display:block;}
+.history-list{margin-top:10px;font-size:13px;color:#333;border-top:1px solid #eee;padding-top:8px;}
+.trade-entry{border:1px solid #eee;border-radius:10px;padding:10px;margin-top:10px;background:#fafafa;}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px;}
+th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;}
+thead tr{background:#f2f3f6;}
+@media(max-width:480px){.profile-drawer{width:100%;right:-100%;}}
 </style>
 </head>
 <body>
@@ -113,7 +105,7 @@
     <div id="overviewTab" class="tab-content overview active">
       <h3>Account Übersicht</h3>
       <p class="muted">Aktueller Kontostand:</p>
-      <div style="font-size:20px;font-weight:700;margin:8px 0;">€<span id="currentBalance">0.00</span></div>
+      <div style="font-size:20px;font-weight:700;margin:8px 0;">€<span id="currentBalance">10000.00</span></div>
       <label>Neuer Kontostand:</label>
       <input type="number" id="newBalance" placeholder="z. B. 12500">
       <button class="btn primary" id="setBalanceBtn" style="margin-top:10px;">Set Balance</button>
@@ -135,120 +127,144 @@
         <label>Exit Preis</label><input type="number" id="exitPrice" step="0.01" required>
         <label>Positionsgröße</label><input type="number" id="tradeSize" step="0.01" required>
         <label>Notiz (optional)</label><textarea id="tradeNote"></textarea>
-        <button class="btn primary" type="submit" style="margin-top:10px;">Trade speichern</button>
+        <button type="submit" class="btn primary" style="margin-top:10px;">Eintragen</button>
       </form>
-      <h3 style="margin-top:20px;">Trade Historie</h3>
       <div id="tradeHistory"></div>
     </div>
   </div>
 </aside>
 
 <script>
-document.addEventListener("DOMContentLoaded",()=>{
-
-/* Drawer */
-const drawer=document.getElementById("profileDrawer");
-document.getElementById("avatarBtn").onclick=()=>drawer.classList.add("open");
-document.getElementById("drawerClose").onclick=()=>drawer.classList.remove("open");
-
-/* Tabs */
-const tabs=document.querySelectorAll(".tab"),contents=document.querySelectorAll(".tab-content");
-tabs.forEach(t=>t.onclick=()=>{
-  tabs.forEach(x=>x.classList.remove("active"));
-  contents.forEach(c=>c.classList.remove("active"));
-  t.classList.add("active");
-  document.getElementById(t.dataset.tab+"Tab").classList.add("active");
-});
-
-/* State */
-let state=JSON.parse(localStorage.getItem("tradingState"))||{users:{},activeUser:null};
+// ===== STATE MANAGEMENT =====
+let state={users:{},activeUser:null};
 function saveState(){localStorage.setItem("tradingState",JSON.stringify(state));}
-function getUser(){return state.activeUser?state.users[state.activeUser]:null;}
-function createUser(name,balance){
-  state.users[name]={name,balance,balanceHistory:[{value:balance,time:Date.now()}],trades:[]};
-  state.activeUser=name;saveState();
-}
-if(!state.activeUser)createUser("DemoTrader",10000);
+function loadState(){const s=localStorage.getItem("tradingState");if(s)state=JSON.parse(s);}
+function createUser(name,startBalance=10000){if(!state.users[name])state.users[name]={balance:startBalance,balanceHistory:[{time:Date.now(),balance:startBalance}],trades:[]};saveState();}
+function setActiveUser(name){state.activeUser=name;saveState();renderActiveUser();}
+function getActiveUser(){return state.activeUser ? state.users[state.activeUser]:null;}
+function renderActiveUser(){document.getElementById("activeUser").textContent=state.activeUser||"-";}
 
-/* Overview */
+// ===== PROFILE DRAWER =====
+const avatarBtn=document.getElementById("avatarBtn");
+const profileDrawer=document.getElementById("profileDrawer");
+const drawerClose=document.getElementById("drawerClose");
+const tabs=document.querySelectorAll(".tab"); 
+const tabContents=document.querySelectorAll(".tab-content");
+avatarBtn.onclick=()=>{profileDrawer.classList.add("open");};
+drawerClose.onclick=()=>{profileDrawer.classList.remove("open");};
+tabs.forEach(tab=>{tab.onclick=()=>{
+  tabs.forEach(t=>t.classList.remove("active"));
+  tab.classList.add("active");
+  const sel=tab.dataset.tab;
+  tabContents.forEach(tc=>tc.classList.remove("active"));
+  document.getElementById(sel+"Tab").classList.add("active");
+}});
+
+// ===== ACCOUNT BALANCE =====
+const currentBalance=document.getElementById("currentBalance");
+const balanceHistoryDiv=document.getElementById("balanceHistory");
+const setBalanceBtn=document.getElementById("setBalanceBtn");
+const newBalanceInput=document.getElementById("newBalance");
 function renderOverview(){
-  const u=getUser();if(!u)return;
-  document.getElementById("currentBalance").textContent=u.balance.toFixed(2);
-  document.getElementById("activeUser").textContent=u.name;
-  const hist=document.getElementById("balanceHistory");
-  hist.innerHTML=u.balanceHistory.slice(-5).reverse().map(h=>{
-    const d=new Date(h.time).toLocaleString();
-    return `<div>€${h.value.toFixed(2)} <span class='muted'>(${d})</span></div>`;
-  }).join("")||"<div class='muted'>Keine Änderungen bisher</div>";
+  const user=getActiveUser();if(!user)return;
+  currentBalance.textContent=user.balance.toFixed(2);
+  balanceHistoryDiv.innerHTML=user.balanceHistory.map(e=>`<div>${new Date(e.time).toLocaleString()}: €${e.balance.toFixed(2)}</div>`).join("");
 }
-renderOverview();
+setBalanceBtn.onclick=()=>{
+  const val=parseFloat(newBalanceInput.value);
+  if(isNaN(val))return alert("Bitte gültigen Wert eingeben");
+  const user=getActiveUser();if(!user)return;
+  user.balance=val;
+  user.balanceHistory.push({time:Date.now(),balance:val});
+  saveState();renderOverview();
+  newBalanceInput.value="";
+}
 
-/* Set Balance */
-document.getElementById("setBalanceBtn").onclick=()=>{
-  const val=parseFloat(document.getElementById("newBalance").value);
-  const u=getUser();if(u&&!isNaN(val)){u.balance=val;u.balanceHistory.push({value:val,time:Date.now()});saveState();renderOverview();document.getElementById("newBalance").value="";}
-};
-
-/* Trades */
-document.getElementById("tradeForm").onsubmit=e=>{
+// ===== TRADING LOG =====
+const tradeForm=document.getElementById("tradeForm");
+const tradeHistoryDiv=document.getElementById("tradeHistory");
+function renderTrades(){
+  const u=getActiveUser();if(!u)return;
+  if(u.trades.length===0){tradeHistoryDiv.innerHTML="<p>Keine Trades vorhanden</p>";return;}
+  let html=`<table><thead><tr><th>Datum</th><th>Symbol</th><th>Side</th><th>Entry</th><th>Exit</th><th>Size</th><th>PnL</th><th>PnL%</th><th>Aktion</th></tr></thead><tbody>`;
+  u.trades.slice().reverse().forEach((t,idx)=>{
+    const color=t.pnl>=0?"green":"red";
+    const d=new Date(t.time).toLocaleString();
+    html+=`<tr>
+      <td>${d}</td>
+      <td>${t.symbol}</td>
+      <td>${t.side}</td>
+      <td>${t.entry}</td>
+      <td>${t.exit}</td>
+      <td>${t.size}</td>
+      <td class="value ${color}">${t.pnl.toFixed(2)}</td>
+      <td class="value ${color}">${t.pnlPerc.toFixed(2)}</td>
+      <td><button onclick="editTrade(${u.trades.length-1-idx})">✎</button> <button onclick="deleteTrade(${u.trades.length-1-idx})">🗑</button></td>
+    </tr>`;
+  });
+  html+="</tbody></table>";tradeHistoryDiv.innerHTML=html;
+}
+tradeForm.onsubmit=(e)=>{
   e.preventDefault();
-  const u=getUser();if(!u)return;
-  const symbol=document.getElementById("tradeSymbol").value.trim();
+  const u=getActiveUser();if(!u)return alert("Kein aktiver User");
+  const s=document.getElementById("tradeSymbol").value;
   const side=document.getElementById("tradeSide").value;
   const entry=parseFloat(document.getElementById("entryPrice").value);
   const exit=parseFloat(document.getElementById("exitPrice").value);
   const size=parseFloat(document.getElementById("tradeSize").value);
-  const note=document.getElementById("tradeNote").value.trim();
-  if(!symbol||isNaN(entry)||isNaN(exit)||isNaN(size))return alert("Bitte alle Pflichtfelder ausfüllen");
-  let pnl=(side==="Long")?(exit-entry)*size:(entry-exit)*size;
-  let posVal=entry*size;
-  let pnlPerc=(pnl/posVal)*100;
-  u.balance+=pnl;
-  u.balanceHistory.push({value:u.balance,time:Date.now()});
-  u.trades.push({symbol,side,entry,exit,size,pnl,pnlPerc,posVal,note,time:Date.now()});
-  saveState();renderOverview();renderTrades();e.target.reset();
-};
-function renderTrades(){
-  const u=getUser();if(!u)return;
-  const div=document.getElementById("tradeHistory");
-  if(!u.trades.length){div.innerHTML="<div class='muted'>Noch keine Trades.</div>";return;}
-  div.innerHTML=u.trades.slice().reverse().map(t=>{
-    const d=new Date(t.time).toLocaleString();
-    const color=t.pnl>=0?"green":"red";
-    return `<div class='trade-entry'>
-      <b>${t.symbol}</b> <span class='muted'>(${t.side})</span><br>
-      Entry: ${t.entry} | Exit: ${t.exit} | Size: ${t.size}<br>
-      <b style='color:var(--${color});'>PnL: ${t.pnl.toFixed(2)} € (${t.pnlPerc.toFixed(2)}%)</b><br>
-      <span class='muted'>Value: ${t.posVal.toFixed(2)} € | ${d}</span><br>
-      ${t.note?`<em>${t.note}</em>`:""}
-    </div>`;
-  }).join("");
+  const note=document.getElementById("tradeNote").value;
+  const pnl=(side==="Long")?(exit-entry)*size:(entry-exit)*size;
+  const pnlPerc=(pnl/(entry*size))*100;
+  u.trades.push({symbol:s,side,entry,exit,size,note,pnl,pnlPerc,time:Date.now()});
+  u.balance=0; u.trades.forEach(tr=>u.balance+=tr.pnl);u.balanceHistory.push({time:Date.now(),balance:u.balance}); saveState();
+  renderOverview();renderTrades(); tradeForm.reset();
 }
-renderTrades();
+function deleteTrade(idx){const u=getActiveUser();if(!u)return;u.trades.splice(idx,1);saveState();renderOverview();renderTrades();}
+function editTrade(idx){const u=getActiveUser();if(!u)return; const t=u.trades[idx]; const newExit=prompt("Neuer Exit Preis:",t.exit);if(newExit===null)return; const exit=parseFloat(newExit);if(isNaN(exit))return alert("Ungültiger Wert"); t.exit=exit; t.pnl=(t.side==="Long")?(exit-t.entry)*t.size:(t.entry-exit)*t.size; t.pnlPerc=(t.pnl/(t.entry*t.size))*100; t.time=Date.now(); u.balance=0; u.trades.forEach(tr=>u.balance+=tr.pnl); saveState();renderOverview();renderTrades();}
 
-/* Calculator */
-function formatEUR(n){return Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
-document.getElementById("calcBtn").addEventListener("click",()=>{
-  const account=parseFloat(document.getElementById("account").value)||0;
-  const riskPercent=parseFloat(document.getElementById("riskPercent").value)||0;
-  const leverage=parseFloat(document.getElementById("leverage").value)||1;
-  const stopLoss=parseFloat(document.getElementById("stopLoss").value)||0;
-  const rtr=parseFloat(document.getElementById("rtr").value)||0;
-  const riskMoney=account*(riskPercent/100);
-  const position=(riskMoney/(stopLoss/100))*leverage;
+// ===== CALCULATOR =====
+const calcBtn=document.getElementById("calcBtn");
+const resetBtn=document.getElementById("resetBtn");
+calcBtn.onclick=()=>{
+  const account=parseFloat(document.getElementById("account").value);
+  const riskPercent=parseFloat(document.getElementById("riskPercent").value)/100;
+  const leverage=parseFloat(document.getElementById("leverage").value);
+  const stopLoss=parseFloat(document.getElementById("stopLoss").value)/100;
+  const rtr=parseFloat(document.getElementById("rtr").value);
+
+  const maxRisk=account*riskPercent;
+  const position=maxRisk/stopLoss*leverage;
   const margin=position/leverage;
   const exposure=position;
-  const tp=riskMoney*rtr;
-  document.getElementById("riskMoney").textContent="€"+formatEUR(riskMoney);
-  document.getElementById("positionSize").textContent="€"+formatEUR(position);
-  document.getElementById("marginReq").textContent="€"+formatEUR(margin);
-  document.getElementById("exposure").textContent="€"+formatEUR(exposure);
-  document.getElementById("tpValue").textContent="€"+formatEUR(tp);
-  document.getElementById("explainLine").textContent=`Du riskierst €${formatEUR(riskMoney)} (${riskPercent}% von €${formatEUR(account)}). Mit SL ${stopLoss}% und ${leverage}x Hebel beträgt die Position €${formatEUR(position)} und Marge €${formatEUR(margin)}. Bei R:R ${rtr} ergibt sich ein Profitziel von €${formatEUR(tp)}.`;
-});
-document.getElementById("resetBtn").onclick=()=>location.reload();
+  const tp=maxRisk*rtr/stopLoss;
 
-});
+  document.getElementById("riskMoney").textContent=maxRisk.toFixed(2);
+  document.getElementById("positionSize").textContent=position.toFixed(2);
+  document.getElementById("marginReq").textContent=margin.toFixed(2);
+  document.getElementById("exposure").textContent=exposure.toFixed(2);
+  document.getElementById("tpValue").textContent=tp.toFixed(2);
+  document.getElementById("explainLine").textContent=`Account €${account}, Risk ${riskPercent*100}%, Leverage ${leverage}x, SL ${stopLoss*100}%, Positionsgröße ${position.toFixed(2)}, Marge ${margin.toFixed(2)}, TP €${tp.toFixed(2)} (R:R ${rtr})`;
+}
+resetBtn.onclick=()=>{
+  document.getElementById("account").value=10000;
+  document.getElementById("riskPercent").value=0.6;
+  document.getElementById("leverage").value=2;
+  document.getElementById("stopLoss").value=0.8;
+  document.getElementById("rtr").value=2.0;
+  document.getElementById("riskMoney").textContent="-";
+  document.getElementById("positionSize").textContent="-";
+  document.getElementById("marginReq").textContent="-";
+  document.getElementById("exposure").textContent="-";
+  document.getElementById("tpValue").textContent="-";
+  document.getElementById("explainLine").textContent="Erklärung erscheint hier nach Berechnen.";
+}
+
+// ===== INIT =====
+loadState();
+if(!getActiveUser()){createUser("Demo"); setActiveUser("Demo");}
+renderActiveUser();
+renderOverview();
+renderTrades();
 </script>
 </body>
 </html>
