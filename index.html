@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<meta name='robots' content='noindex,nofollow'>
+
+ 
+<style></style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Risk Management Tool — Header</title>
+<style>
+  /* ---------- Reset / Grund ---------- */
+  :root{
+    --bg: #f7f8fb;
+    --card: #ffffff;
+    --text: #111;
+    --muted: #6b7280;
+    --accent: #007aff;
+    --glass: rgba(255,255,255,0.6);
+    --shadow: 0 6px 20px rgba(16,24,40,0.08);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--bg);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+
+  /* ---------- Fixed Header ---------- */
+  .site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;                     /* angenehme Höhe für mobile & desktop */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.80));
+    backdrop-filter: blur(6px);
+    box-shadow: var(--shadow);
+    border-bottom: 1px solid rgba(16,24,40,0.04);
+    z-index: 1000;
+  }
+
+  /* Link / Title (links) */
+  .site-header .brand {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .brand .logo {
+    width:40px;
+    height:40px;
+    border-radius:8px;
+    background: linear-gradient(135deg,#f0f6ff,#e6f3ff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: 0 4px 14px rgba(2,6,23,0.06);
+    font-weight:700;
+    color:var(--accent);
+    font-size:16px;
+    letter-spacing:0.5px;
+  }
+  .brand .title {
+    font-size:18px;
+    font-weight:600;
+    line-height:1;
+  }
+  .brand .subtitle {
+    font-size:12px;
+    color:var(--muted);
+    margin-top:2px;
+    display:block;
+  }
+
+  /* Avatar (rechts) */
+  .avatar-btn {
+    width:44px;
+    height:44px;
+    border-radius:12px;
+    background:linear-gradient(180deg,#ffffff,#f3f6fb);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid rgba(16,24,40,0.05);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+    cursor:pointer;
+  }
+  .avatar-btn img {
+    width:28px;
+    height:28px;
+    border-radius:6px;
+    object-fit:cover;
+    display:block;
+  }
+  .avatar-btn:active { transform: scale(0.98); }
+
+  /* Space for page content so header doesn't cover it */
+  main{ padding-top: 90px; max-width:980px; margin: 24px auto; }
+
+  /* Responsive tweaks */
+  @media (max-width:420px){
+    .site-header { height:56px; padding: 0 12px; }
+    .brand .title { font-size:16px; }
+    .brand .logo { width:36px; height:36px; font-size:14px; border-radius:9px; }
+    .avatar-btn { width:40px; height:40px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Fixed Header -->
+  <header class="site-header" role="banner" aria-label="Seitenkopf">
+    <a class="brand" href="#calculator" title="Zurück zum Kalkulator" onclick="goCalculator(event)">
+      <div class="logo" aria-hidden="true">RM</div>
+      <div>
+        <div class="title">Risk Management Tool</div>
+        <span class="subtitle">Kalkulator</span>
+      </div>
+    </a>
+
+    <button class="avatar-btn" aria-label="Profil öffnen" onclick="openProfile()">
+      <!-- Einfaches Avatar-Icon (SVG) -->
+      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23011' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2' /><circle cx='12' cy='7' r='4' /></svg>" alt="Avatar">
+    </button>
+  </header>
+
+  <!-- Beispiel-Hauptbereich -->
+  <main>
+    <h2 style="margin-top:0;font-weight:600;">Demo-Inhalt</h2>
+    <p style="color:#444;">Hier ist der Seiteninhalt. Der Header bleibt oben fixiert — klicke links auf den Titel, um zurück zum Kalkulator zu springen, oder rechts auf das Avatar-Icon, um das Profil zu öffnen.</p>
+
+    <div style="margin-top:20px;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.04);">
+      <p style="margin:0;color:#333;">Füge hier deinen Kalkulator-Container ein (z. B. das bestehende Tool). Das <strong>main</strong> Element hat automatisch genügend Abstand, damit der Header nichts verdeckt.</p>
+    </div>
+  </main>
+
+<script>
+  function goCalculator(e){
+    // Standardlink (ersetze '#calculator' durch ID oder URL deines Kalkulators)
+    // Wenn du eine bestimmte ID auf der Seite hast, du kannst scrollIntoView aufrufen:
+    // document.querySelector('#calculator').scrollIntoView({behavior:'smooth'});
+    // Hier Default: Verhindere wenn du Anchors anders handhaben willst:
+    // e.preventDefault();
+    console.log('Zurück zum Kalkulator (ersetze ggf. die Funktion goCalculator mit deiner Navigation).');
+  }
+
+  function openProfile(){
+    // Öffnet Profil-Dashboard — hier Platzhalter
+    // Ersetze mit navigation zur Profilseite oder Modal-Öffnung
+    window.location.href = '#profile';
+  }
+</script>
+
+</body>
+</html>
+<script></script>
+</body>
+</html>
