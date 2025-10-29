@@ -11,181 +11,213 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradingCheck</title>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TradingCheck — Kalkulator & Profil</title>
 <style>
-  body {
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
-    background:#f9f9f9;
-    color:#1c1c1e;
+  :root{
+    --bg:#f7f8fb;
+    --card:#fff;
+    --muted:#6b7280;
+    --accent:#0071e3;
+    --success:#00b341;
+    --danger:#e63946;
   }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:#111;}
+
   /* HEADER */
   header{
-    position:fixed;top:0;left:0;right:0;height:60px;
-    background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);
-    border-bottom:1px solid rgba(0,0,0,0.1);
+    position:fixed;top:0;left:0;right:0;height:64px;
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 20px;z-index:100;
+    background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(0,0,0,0.06);
+    padding:0 20px;z-index:1000;
   }
-  .logo{font-size:20px;font-weight:600;cursor:pointer;}
-  .logo span:first-child{color:#111;}
-  .logo span:last-child{color:#0071e3;}
-  .avatar{width:36px;height:36px;border-radius:50%;
-          background:linear-gradient(135deg,#0071e3,#00c6ff);
-          display:flex;align-items:center;justify-content:center;
-          cursor:pointer;color:white;font-weight:600;font-size:14px;
-          transition:transform 0.2s ease;user-select:none;}
-  .avatar:hover{transform:scale(1.05);}
-  main{padding-top:80px;text-align:center;}
+  .logo{font-size:20px;font-weight:700;cursor:pointer;}
+  .logo .t{color:#111;} .logo .c{color:var(--accent);}
+  .avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00c6ff);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;cursor:pointer;}
 
-  /* CALCULATOR OVERLAY */
-  .calc-overlay{
-    display:none;
-    position:fixed;
-    top:0;left:0;width:100%;height:100%;
-    background: rgba(0,0,0,0.4);
-    backdrop-filter: blur(4px);
-    align-items:center;
-    justify-content:center;
-    z-index:200;
-  }
-  .calc-box{
-    background:white;
-    border-radius:12px;
-    box-shadow:0 4px 20px rgba(0,0,0,0.1);
-    width: 350px;
-    max-width:90%;
-    padding:20px;
-    position:relative;
-  }
-  .calc-box h3{margin-top:0;text-align:center;}
-  .calc-box input{width:100%;padding:10px;margin:8px 0;font-size:15px;border:1px solid #ccc;border-radius:6px;}
-  .calc-box input:focus{outline:none;border-color:#0071e3;}
-  .calc-box button{background:#0071e3;color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;width:100%;font-size:15px;margin-top:10px;}
-  .calc-box button:hover{background:#005bb5;}
-  .close-btn{position:absolute;top:12px;right:12px;font-size:20px;cursor:pointer;color:#111;}
+  main{padding-top:90px;max-width:1100px;margin:0 auto;padding:0 20px;}
 
-  /* PROFILE DASHBOARD */
+  /* CALCULATOR */
+  .calculator-panel{background:var(--card);padding:26px;border-radius:14px;
+    box-shadow:0 12px 30px rgba(2,6,23,0.04);max-width:760px;margin-top:15px;}
+  .calculator-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .full{grid-column:1/-1;}
+  label{display:block;margin-bottom:6px;font-weight:600;}
+  input[type="number"]{width:100%;padding:12px;border-radius:10px;border:1px solid #e6e6e9;font-size:16px;background:#fbfbfd;}
+  .btn{padding:12px 16px;border-radius:10px;border:none;font-weight:700;font-size:16px;cursor:pointer;}
+  .btn.primary{background:var(--accent);color:#fff;}
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(0,113,227,0.12);}
+  .results{margin-top:18px;background:#fbfdff;border-radius:10px;padding:14px;border-left:4px solid rgba(0,113,227,0.12);}
+  .result-line{display:flex;justify-content:space-between;padding:6px 0;}
+  .value.red{color:var(--danger);font-weight:700;} .value.green{color:var(--success);font-weight:700;}
+  .muted{color:var(--muted);font-size:13px;}
+
+  /* PROFILE DRAWER */
   .profile-drawer{
-    position:fixed;top:0;right:-400px;width:400px;height:100%;
-    background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);
-    box-shadow:-2px 0 20px rgba(0,0,0,0.1);
-    border-left:1px solid rgba(0,0,0,0.1);
-    transition:right 0.3s ease;z-index:150;display:flex;flex-direction:column;
-    padding-bottom:20px;
+    position:fixed;top:0;right:-420px;width:420px;height:100%;
+    background:rgba(255,255,255,0.98);backdrop-filter:blur(8px);
+    box-shadow:-14px 0 40px rgba(2,6,23,0.08);transition:right .3s ease;z-index:1500;
+    display:flex;flex-direction:column;
   }
   .profile-drawer.open{right:0;}
-  .drawer-header{padding:20px;font-size:18px;font-weight:600;border-bottom:1px solid rgba(0,0,0,0.1);position:relative;}
-  .tabs{display:flex;justify-content:space-around;border-bottom:1px solid rgba(0,0,0,0.1);}
-  .tab{flex:1;padding:12px 0;text-align:center;cursor:pointer;font-weight:500;transition:background 0.2s;}
-  .tab.active{border-bottom:3px solid #0071e3;color:#0071e3;}
-  .tab-content{flex:1;overflow-y:auto;padding:20px;}
-  .close-drawer-btn{position:absolute;top:12px;right:12px;font-size:20px;cursor:pointer;color:#111;}
-  @media (max-width:450px){.profile-drawer{width:100%;}}
+  .drawer-header{padding:22px;font-weight:700;font-size:18px;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;justify-content:space-between;}
+  .tabs{display:flex;border-bottom:1px solid rgba(0,0,0,0.06);}
+  .tab{flex:1;text-align:center;padding:14px;cursor:pointer;font-weight:600;color:#666;}
+  .tab.active{color:var(--accent);border-bottom:3px solid var(--accent);}
+  .drawer-body{flex:1;overflow:auto;padding:18px;}
+
+  .overview,.tradelog{display:none;}
+  .tab-content.active{display:block;}
+
+  @media(max-width:480px){.profile-drawer{width:100%;right:-100%;}}
 </style>
 </head>
-
 <body>
+
 <header>
-  <div class="logo" onclick="openCalculator()">
-    <span>Trading</span><span>Check</span>
-  </div>
-  <div class="avatar" id="avatar">👤</div>
+  <div class="logo" id="logoBtn"><span class="t">Trading</span><span class="c">Check</span></div>
+  <div class="avatar" id="avatarBtn">👤</div>
 </header>
 
-<main style="padding-top:80px;text-align:center;">
-  <h2>Dashboard Content</h2>
-  <p>Hier ist der Hauptbereich deiner Seite.</p>
+<main>
+  <h1 style="font-weight:700;">TradingCheck</h1>
+  <p class="muted">Schneller Risk-Calculator — Marge, Position, Exposure & Take-Profit</p>
+
+  <!-- CALCULATOR -->
+  <section id="calculatorPanel" class="calculator-panel">
+    <div class="calculator-grid">
+      <div><label>Account (€)</label><input type="number" id="account" value="10000"></div>
+      <div><label>Risk pro Trade (%)</label><input type="number" id="riskPercent" value="0.6" step="0.01"></div>
+      <div><label>Leverage</label><input type="number" id="leverage" value="2"></div>
+      <div><label>Stop Loss (%)</label><input type="number" id="stopLoss" value="0.8" step="0.01"></div>
+      <div class="full"><label>Risk-to-Reward Ratio (R:R)</label><input type="number" id="rtr" value="2.0" step="0.1"></div>
+      <div class="full" style="display:flex;gap:10px;">
+        <button class="btn primary" id="calcBtn">Berechnen</button>
+        <button class="btn ghost" id="resetBtn">Reset</button>
+      </div>
+    </div>
+    <div class="results">
+      <div class="result-line"><span class="muted">Max Risk (€)</span><span id="riskMoney" class="value red">-</span></div>
+      <div class="result-line"><span class="muted">Position</span><span id="positionSize" class="value">-</span></div>
+      <div class="result-line"><span class="muted">Marge</span><span id="marginReq" class="value">-</span></div>
+      <div class="result-line"><span class="muted">Exposure</span><span id="exposure" class="value">-</span></div>
+      <div class="result-line"><span class="muted">Take-Profit</span><span id="tpValue" class="value green">-</span></div>
+      <div class="muted" id="explainLine">Erklärung erscheint hier nach Berechnen.</div>
+    </div>
+  </section>
 </main>
 
-<!-- CALCULATOR OVERLAY -->
-<div class="calc-overlay" id="calcOverlay">
-  <div class="calc-box">
-    <span class="close-btn" onclick="closeCalculator()">×</span>
-    <h3>Trading Kalkulator</h3>
-    <label>Account (€)</label>
-    <input type="number" id="accountInput" value="10000" />
-    <label>Risk (%)</label>
-    <input type="number" id="riskInput" value="6" />
-    <label>Leverage</label>
-    <input type="number" id="leverageInput" value="2" />
-    <label>Stop Loss (%)</label>
-    <input type="number" id="slInput" value="0.5" />
-    <label>Risk-to-Reward Ratio</label>
-    <input type="number" id="rtrInput" value="2" step="0.1"/>
-    <button onclick="calculateMargin()">Berechnen</button>
-    <p id="result" style="margin-top:10px;font-weight:600;"></p>
-  </div>
-</div>
-
-<!-- PROFILE DASHBOARD -->
-<div class="profile-drawer" id="profileDrawer">
+<!-- PROFILE DRAWER -->
+<aside class="profile-drawer" id="profileDrawer">
   <div class="drawer-header">
     Profil
-    <span class="close-drawer-btn" onclick="closeDrawer()">×</span>
+    <span id="drawerClose" style="cursor:pointer;">✕</span>
   </div>
+
   <div class="tabs">
-    <div class="tab active" data-tab="overview" onclick="switchTab(this)">Overview</div>
-    <div class="tab" data-tab="tradinglog" onclick="switchTab(this)">Trading Log</div>
+    <div class="tab active" data-tab="overview">Overview</div>
+    <div class="tab" data-tab="tradelog">Trading Log</div>
   </div>
-  <div class="tab-content" id="tabContent">
-    <p>Overview-Inhalte werden hier angezeigt.</p>
+
+  <div class="drawer-body">
+    <div id="overviewTab" class="tab-content overview active">
+      <h3>Account Übersicht</h3>
+      <p class="muted">Aktueller Kontostand:</p>
+      <div style="font-size:20px;font-weight:700;margin:8px 0;">€<span id="currentBalance">0.00</span></div>
+
+      <label>Neuer Kontostand:</label>
+      <input type="number" id="newBalance" placeholder="z. B. 12500">
+      <button class="btn primary" id="setBalanceBtn" style="margin-top:10px;">Set Balance</button>
+
+      <p class="muted" style="margin-top:20px;">User: <span id="activeUser">–</span></p>
+    </div>
+
+    <div id="tradelogTab" class="tab-content tradelog">
+      <h3>Trading Log</h3>
+      <p class="muted">Hier erscheinen später deine Trades.</p>
+    </div>
   </div>
-</div>
+</aside>
 
 <script>
-  // Elemente
-  const calcOverlay = document.getElementById('calcOverlay');
-  const drawer = document.getElementById('profileDrawer');
-  const avatar = document.getElementById('avatar');
+/* ======= PROFILE DRAWER TOGGLE ======= */
+const drawer=document.getElementById("profileDrawer");
+const avatar=document.getElementById("avatarBtn");
+const closeBtn=document.getElementById("drawerClose");
+avatar.onclick=()=>drawer.classList.add("open");
+closeBtn.onclick=()=>drawer.classList.remove("open");
 
-  // CALCULATOR
-  function openCalculator(){ calcOverlay.style.display='flex'; }
-  function closeCalculator(){ calcOverlay.style.display='none'; }
-
-  function calculateMargin(){
-    const account = parseFloat(document.getElementById('accountInput').value);
-    const riskPerc = parseFloat(document.getElementById('riskInput').value);
-    const leverage = parseFloat(document.getElementById('leverageInput').value);
-    const slPerc = parseFloat(document.getElementById('slInput').value);
-    const rtr = parseFloat(document.getElementById('rtrInput').value);
-
-    const maxLoss = account*(riskPerc/100);
-    const positionSize = maxLoss / (slPerc/100) * leverage;
-    const takeProfit = slPerc*rtr*positionSize/100;
-
-    document.getElementById('result').innerHTML = `
-      <span style="color:red;">Risiko: ${maxLoss.toFixed(2)} €</span><br>
-      Position Größe: ${positionSize.toFixed(2)} €<br>
-      <span style="color:green;">Profit/TP: ${takeProfit.toFixed(2)} €</span>
-    `;
-  }
-
-  // PROFILE-DRAWER
-  function openDrawer(){ drawer.classList.add('open'); }
-  function closeDrawer(){ drawer.classList.remove('open'); }
-
-  // AVATAR CLICK
-  avatar.addEventListener('click', ()=>{
-    openDrawer();
+/* ======= TAB SWITCHING ======= */
+const tabs=document.querySelectorAll(".tab");
+const contents=document.querySelectorAll(".tab-content");
+tabs.forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    tabs.forEach(t=>t.classList.remove("active"));
+    contents.forEach(c=>c.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.tab+"Tab").classList.add("active");
   });
+});
 
-  // TABS
-  function switchTab(tabElement){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    tabElement.classList.add('active');
-    const tab = tabElement.getAttribute('data-tab');
-    const tabContent = document.getElementById('tabContent');
-    if(tab==='overview'){
-      tabContent.innerHTML="<p>Overview-Inhalte werden hier angezeigt.</p>";
-    } else if(tab==='tradinglog'){
-      tabContent.innerHTML="<p>Trading Log wird hier angezeigt.</p>";
-    }
-  }
+/* ======= STATE MANAGEMENT ======= */
+let state=JSON.parse(localStorage.getItem("tradingState"))||{users:{},activeUser:null};
+function saveState(){localStorage.setItem("tradingState",JSON.stringify(state));}
+function createUser(name,startBalance){
+  state.users[name]={name,balance:startBalance,balanceHistory:[{value:startBalance,time:Date.now()}]};
+  state.activeUser=name; saveState();
+}
+function getActiveUser(){return state.activeUser?state.users[state.activeUser]:null;}
+function setBalance(value){
+  const u=getActiveUser(); if(!u)return;
+  u.balance=value;
+  u.balanceHistory.push({value,time:Date.now()});
+  saveState(); renderOverview();
+}
+
+/* ======= INIT DEMO USER ======= */
+if(!state.activeUser){createUser("DemoTrader",10000);}
+renderOverview();
+
+/* ======= OVERVIEW RENDER ======= */
+function renderOverview(){
+  const u=getActiveUser();
+  if(!u)return;
+  document.getElementById("currentBalance").textContent=u.balance.toFixed(2);
+  document.getElementById("activeUser").textContent=u.name;
+}
+document.getElementById("setBalanceBtn").onclick=()=>{
+  const val=parseFloat(document.getElementById("newBalance").value);
+  if(!isNaN(val)){setBalance(val);document.getElementById("newBalance").value="";}
+};
+
+/* ======= CALCULATOR ======= */
+function formatEUR(n){return Number(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});}
+document.getElementById("calcBtn").onclick=function(){
+  const account=parseFloat(document.getElementById("account").value)||0;
+  const riskPercent=parseFloat(document.getElementById("riskPercent").value)||0;
+  const leverage=parseFloat(document.getElementById("leverage").value)||1;
+  const stopLoss=parseFloat(document.getElementById("stopLoss").value)||0;
+  const rtr=parseFloat(document.getElementById("rtr").value)||0;
+  const riskMoney=account*(riskPercent/100);
+  const position=(riskMoney/(stopLoss/100))*leverage;
+  const margin=position/leverage;
+  const exposure=position;
+  const tp=riskMoney*rtr;
+  document.getElementById("riskMoney").textContent="€"+formatEUR(riskMoney);
+  document.getElementById("positionSize").textContent="€"+formatEUR(position);
+  document.getElementById("marginReq").textContent="€"+formatEUR(margin);
+  document.getElementById("exposure").textContent="€"+formatEUR(exposure);
+  document.getElementById("tpValue").textContent="€"+formatEUR(tp);
+  document.getElementById("explainLine").textContent=
+    `Du riskierst €${formatEUR(riskMoney)} (${riskPercent}% von €${formatEUR(account)}). Mit SL ${stopLoss}% und ${leverage}x Hebel beträgt die Position €${formatEUR(position)} und Marge €${formatEUR(margin)}. Bei R:R ${rtr} ergibt sich ein Profitziel von €${formatEUR(tp)}.`;
+};
+document.getElementById("resetBtn").onclick=()=>location.reload();
 </script>
+
 </body>
 </html>
 <script></script>
