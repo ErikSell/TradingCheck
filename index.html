@@ -8,264 +8,342 @@
 <style></style>
 </head>
 <body>
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradingCheck</title>
-<style>
-:root{
-  --bg:#f7f8fb;--card:#fff;--muted:#6b7280;
-  --accent:#0071e3;--success:#00b341;--danger:#e63946;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;background:var(--bg);color:#111;}
-header{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.85);backdrop-filter:blur(8px);border-bottom:1px solid rgba(0,0,0,0.06);padding:0 20px;z-index:1000;}
-.logo{font-size:20px;font-weight:700;cursor:pointer;}
-.logo .c{color:var(--accent);}
-.avatar{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#00c6ff);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;cursor:pointer;}
-main{padding-top:90px;max-width:1100px;margin:0 auto;padding:0 20px;}
-.calculator-panel{background:var(--card);padding:26px;border-radius:14px;box-shadow:0 12px 30px rgba(2,6,23,0.04);max-width:760px;margin-top:15px;}
-.calculator-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.full{grid-column:1/-1;}
-label{display:block;margin-bottom:6px;font-weight:600;}
-input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #e6e6e9;font-size:16px;background:#fbfbfd;}
-textarea{resize:vertical;min-height:60px;}
-.btn{padding:12px 16px;border-radius:10px;border:none;font-weight:700;font-size:16px;cursor:pointer;}
-.btn.primary{background:var(--accent);color:#fff;}
-.btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(0,113,227,0.12);}
-.results{margin-top:18px;background:#fbfdff;border-radius:10px;padding:14px;border-left:4px solid rgba(0,113,227,0.12);}
-.result-line{display:flex;justify-content:space-between;padding:6px 0;}
-.value.red{color:var(--danger);font-weight:700;} .value.green{color:var(--success);font-weight:700;}
-.muted{color:var(--muted);font-size:13px;}
-.profile-drawer{position:fixed;top:0;right:-420px;width:420px;height:100%;background:rgba(255,255,255,0.98);backdrop-filter:blur(8px);box-shadow:-14px 0 40px rgba(2,6,23,0.08);transition:right .3s ease;z-index:1500;display:flex;flex-direction:column;}
-.profile-drawer.open{right:0;}
-.drawer-header{padding:22px;font-weight:700;font-size:18px;border-bottom:1px solid rgba(0,0,0,0.06);display:flex;justify-content:space-between;}
-.tabs{display:flex;border-bottom:1px solid rgba(0,0,0,0.06);}
-.tab{flex:1;text-align:center;padding:14px;cursor:pointer;font-weight:600;color:#666;}
-.tab.active{color:var(--accent);border-bottom:3px solid var(--accent);}
-.drawer-body{flex:1;overflow:auto;padding:18px;}
-.overview,.tradelog{display:none;}
-.tab-content.active{display:block;}
-.history-list{margin-top:10px;font-size:13px;color:#333;border-top:1px solid #eee;padding-top:8px;}
-.trade-entry{border:1px solid #eee;border-radius:10px;padding:10px;margin-top:10px;background:#fafafa;}
-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px;}
-th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;}
-thead tr{background:#f2f3f6;}
-@media(max-width:480px){.profile-drawer{width:100%;right:-100%;}}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trading Tracker</title>
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --surface:#f7f7f8;
+      --muted:#6b6b6b;
+      --accent:#2b8cff;
+      --text:#111217;
+      --radius:10px;
+      --gap:16px;
+      --max-width:1100px;
+      --shadow:0 6px 18px rgba(15,15,15,0.04);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#fbfbfc);
+      color:var(--text);
+      font-size:15px;
+      line-height:1.45;
+    }
+    .container{width:calc(100% - 32px);max-width:var(--max-width);margin:0 auto;padding:20px 16px;}
+
+    /* Navigation */
+    .topbar{border-bottom:1px solid #ececec;background:var(--bg);position:sticky;top:0;z-index:30;}
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;}
+    .brand{display:flex;align-items:center;gap:10px;}
+    .logo{width:34px;height:34px;color:var(--accent)}
+    .brand-name{font-weight:600;}
+    .nav-list{list-style:none;display:flex;gap:8px;margin:0;padding:0;}
+    .nav-link{padding:10px 14px;border-radius:8px;text-decoration:none;color:var(--muted);font-weight:600;}
+    .nav-link.active{background:rgba(43,140,255,0.1);color:var(--accent);box-shadow:var(--shadow)}
+    .nav-link:hover{background:var(--surface);color:var(--text);}
+    @media(max-width:720px){.brand-name{display:none;}}
+
+    main{padding:28px 0}
+    .tab-panel{padding-bottom:40px}
+    .hidden{display:none}
+    .lead{color:var(--muted);margin-top:4px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--gap);margin-top:18px;}
+    .card{background:var(--surface);padding:16px;border-radius:var(--radius);box-shadow:var(--shadow);}
+    .card.full{grid-column:1/-1;}
+    .site-footer{border-top:1px solid #ececec;margin-top:40px;padding:18px 0;text-align:center;color:var(--muted);font-size:13px;}
+
+    /* Formular */
+    form{display:grid;gap:10px;max-width:600px;margin-top:10px;}
+    label{font-weight:600;font-size:14px;}
+    input,select,button{padding:8px 10px;border-radius:6px;border:1px solid #ccc;font-size:14px;}
+    button{background:var(--accent);color:white;border:none;cursor:pointer;transition:0.2s;}
+    button:hover{opacity:0.9}
+
+    /* Tabelle */
+    table{width:100%;border-collapse:collapse;margin-top:20px;font-size:14px;}
+    th,td{border-bottom:1px solid #ddd;padding:8px;text-align:center;}
+    th{background:var(--surface);}
+    tr:hover{background:#f2f7ff;}
+    .pnl-positive{color:green;font-weight:600;}
+    .pnl-negative{color:red;font-weight:600;}
+    .delete-btn{background:#ff4b4b;color:white;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;}
+    .delete-btn:hover{opacity:0.85}
+    .clear-btn{background:#999;color:white;border:none;padding:6px 10px;border-radius:6px;margin-top:10px;cursor:pointer;}
+    .clear-btn:hover{opacity:0.85}
+
+    #accountChart{width:100%;max-width:800px;margin-top:20px;}
+  </style>
 </head>
 <body>
-
-<header>
-  <div class="logo" id="logo"><span class="t">Trading</span><span class="c">Check</span></div>
-  <div class="avatar" id="avatarBtn">👤</div>
-</header>
-
-<main>
-  <h1 style="font-weight:700;">TradingCheck</h1>
-  <p class="muted">Schneller Risk-Calculator — Marge, Position, Exposure & Take-Profit</p>
-
-  <!-- Calculator -->
-  <section id="calculatorPanel" class="calculator-panel">
-    <div class="calculator-grid">
-      <div><label>Account (€)</label><input type="number" id="account" value="10000"></div>
-      <div><label>Risk pro Trade (%)</label><input type="number" id="riskPercent" value="0.6" step="0.01"></div>
-      <div><label>Leverage</label><input type="number" id="leverage" value="2"></div>
-      <div><label>Stop Loss (%)</label><input type="number" id="stopLoss" value="0.8" step="0.01"></div>
-      <div class="full"><label>Risk-to-Reward Ratio (R:R)</label><input type="number" id="rtr" value="2.0" step="0.1"></div>
-      <div class="full" style="display:flex;gap:10px;">
-        <button class="btn primary" id="calcBtn">Berechnen</button>
-        <button class="btn ghost" id="resetBtn">Reset</button>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12l4-8 4 16 4-8 4 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="brand-name">Trading Tracker</span>
       </div>
+      <ul class="nav-list">
+        <li><a href="#dashboard" class="nav-link active" data-tab="dashboard">Dashboard</a></li>
+        <li><a href="#trades" class="nav-link" data-tab="trades">Trades</a></li>
+        <li><a href="#settings" class="nav-link" data-tab="settings">Einstellungen</a></li>
+      </ul>
     </div>
-    <div class="results">
-      <div class="result-line"><span class="muted">Max Risk (€)</span><span id="riskMoney" class="value red">-</span></div>
-      <div class="result-line"><span class="muted">Position</span><span id="positionSize" class="value">-</span></div>
-      <div class="result-line"><span class="muted">Marge</span><span id="marginReq" class="value">-</span></div>
-      <div class="result-line"><span class="muted">Exposure</span><span id="exposure" class="value">-</span></div>
-      <div class="result-line"><span class="muted">Take-Profit</span><span id="tpValue" class="value green">-</span></div>
-      <div class="muted" id="explainLine">Erklärung erscheint hier nach Berechnen.</div>
+  </header>
+
+  <main class="container">
+    <!-- Dashboard -->
+    <section id="dashboard" class="tab-panel">
+      <h1>Dashboard</h1>
+      <p class="lead">Übersicht deines Kontoverlaufs.</p>
+      <div class="card full">
+        <h3>Startkapital</h3>
+        <form id="startForm">
+          <label>Startkapital (€):
+            <input type="number" id="startBalance" placeholder="z.B. 1000" step="0.01" required />
+          </label>
+          <button type="submit">Speichern</button>
+        </form>
+        <canvas id="accountChart"></canvas>
+      </div>
+    </section>
+
+    <!-- Trades -->
+    <section id="trades" class="tab-panel hidden">
+      <h1>Trades</h1>
+      <p class="lead">Trage deine Trades ein – sie werden lokal gespeichert.</p>
+
+      <div class="card full">
+        <h3>Neuer Trade</h3>
+        <form id="tradeForm">
+          <label>Symbol <input type="text" id="symbol" required placeholder="z.B. BTC/USD"></label>
+          <label>Positionsgröße (€) <input type="number" id="size" step="0.01" required></label>
+          <label>Einstiegspreis <input type="number" id="entry" step="0.0001" required></label>
+          <label>Ausstiegspreis <input type="number" id="exit" step="0.0001" required></label>
+          <label>Richtung 
+            <select id="direction">
+              <option value="long">Long</option>
+              <option value="short">Short</option>
+            </select>
+          </label>
+          <label>Leverage <input type="number" id="leverage" value="1" min="1" step="1" required></label>
+          <button type="submit">Trade speichern</button>
+        </form>
+
+        <button id="clearAll" class="clear-btn">Alles löschen</button>
+
+        <table id="tradesTable">
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Symbol</th>
+              <th>Größe (€)</th>
+              <th>Entry</th>
+              <th>Exit</th>
+              <th>Richtung</th>
+              <th>Leverage</th>
+              <th>PnL (€)</th>
+              <th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Einstellungen -->
+    <section id="settings" class="tab-panel hidden">
+      <h1>Einstellungen</h1>
+      <p class="lead">Hier kannst du später Theme & Profil anpassen.</p>
+      <div class="card full">
+        <h3>Profil</h3>
+        <p class="muted">Benutzername: <strong>Demo</strong></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Trading Tracker</small>
     </div>
-  </section>
-</main>
+  </footer>
 
-<!-- Profile Drawer -->
-<aside class="profile-drawer" id="profileDrawer">
-  <div class="drawer-header">
-    Profil <span id="drawerClose" style="cursor:pointer;">✕</span>
-  </div>
-  <div class="tabs">
-    <div class="tab active" data-tab="overview">Overview</div>
-    <div class="tab" data-tab="tradelog">Trading Log</div>
-  </div>
-  <div class="drawer-body">
-    <!-- Overview -->
-    <div id="overviewTab" class="tab-content overview active">
-      <h3>Account Übersicht</h3>
-      <p class="muted">Aktueller Kontostand:</p>
-      <div style="font-size:20px;font-weight:700;margin:8px 0;">€<span id="currentBalance">10000.00</span></div>
-      <label>Neuer Kontostand:</label>
-      <input type="number" id="newBalance" placeholder="z. B. 12500">
-      <button class="btn primary" id="setBalanceBtn" style="margin-top:10px;">Set Balance</button>
-      <p class="muted" style="margin-top:20px;">User: <span id="activeUser">–</span></p>
-      <div class="history-list" id="balanceHistory"></div>
-    </div>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Trading Log -->
-    <div id="tradelogTab" class="tab-content tradelog">
-      <h3>Neuen Trade eintragen</h3>
-      <form id="tradeForm">
-        <label>Symbol</label><input id="tradeSymbol" required>
-        <label>Side</label>
-        <select id="tradeSide">
-          <option value="Long">Long</option>
-          <option value="Short">Short</option>
-        </select>
-        <label>Entry Preis</label><input type="number" id="entryPrice" step="0.01" required>
-        <label>Exit Preis</label><input type="number" id="exitPrice" step="0.01" required>
-        <label>Positionsgröße</label><input type="number" id="tradeSize" step="0.01" required>
-        <label>Notiz (optional)</label><textarea id="tradeNote"></textarea>
-        <button type="submit" class="btn primary" style="margin-top:10px;">Eintragen</button>
-      </form>
-      <div id="tradeHistory"></div>
-    </div>
-  </div>
-</aside>
+  <script>
+    // === Grundlegende UI Navigation ===
+    const navLinks=document.querySelectorAll('.nav-link');
+    const panels=document.querySelectorAll('.tab-panel');
+    const yearEl=document.getElementById('year');
+    if(yearEl)yearEl.textContent=new Date().getFullYear();
 
-<script>
-// ===== STATE MANAGEMENT =====
-let state={users:{},activeUser:null};
-function saveState(){localStorage.setItem("tradingState",JSON.stringify(state));}
-function loadState(){const s=localStorage.getItem("tradingState");if(s)state=JSON.parse(s);}
-function createUser(name,startBalance=10000){if(!state.users[name])state.users[name]={balance:startBalance,balanceHistory:[{time:Date.now(),balance:startBalance}],trades:[]};saveState();}
-function setActiveUser(name){state.activeUser=name;saveState();renderActiveUser();}
-function getActiveUser(){return state.activeUser ? state.users[state.activeUser]:null;}
-function renderActiveUser(){document.getElementById("activeUser").textContent=state.activeUser||"-";}
+    function showTab(id){
+      panels.forEach(p=>p.classList.toggle('hidden',p.id!==id));
+      navLinks.forEach(a=>a.classList.toggle('active',a.dataset.tab===id));
+      if(id==='dashboard') updateChart();
+    }
+    navLinks.forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const t=a.dataset.tab;
+        history.replaceState(null,'',`#${t}`);
+        showTab(t);
+      });
+    });
+    window.addEventListener('hashchange',()=>showTab(location.hash.replace('#','')||'dashboard'));
+    showTab(location.hash.replace('#','')||'dashboard');
 
-// ===== PROFILE DRAWER =====
-const avatarBtn=document.getElementById("avatarBtn");
-const profileDrawer=document.getElementById("profileDrawer");
-const drawerClose=document.getElementById("drawerClose");
-const tabs=document.querySelectorAll(".tab"); 
-const tabContents=document.querySelectorAll(".tab-content");
-avatarBtn.onclick=()=>{profileDrawer.classList.add("open");};
-drawerClose.onclick=()=>{profileDrawer.classList.remove("open");};
-tabs.forEach(tab=>{tab.onclick=()=>{
-  tabs.forEach(t=>t.classList.remove("active"));
-  tab.classList.add("active");
-  const sel=tab.dataset.tab;
-  tabContents.forEach(tc=>tc.classList.remove("active"));
-  document.getElementById(sel+"Tab").classList.add("active");
-}});
+    // === Trades ===
+    const tradeForm=document.getElementById('tradeForm');
+    const tradesTableBody=document.querySelector('#tradesTable tbody');
+    const clearAllBtn=document.getElementById('clearAll');
 
-// ===== ACCOUNT BALANCE =====
-const currentBalance=document.getElementById("currentBalance");
-const balanceHistoryDiv=document.getElementById("balanceHistory");
-const setBalanceBtn=document.getElementById("setBalanceBtn");
-const newBalanceInput=document.getElementById("newBalance");
-function renderOverview(){
-  const user=getActiveUser();if(!user)return;
-  currentBalance.textContent=user.balance.toFixed(2);
-  balanceHistoryDiv.innerHTML=user.balanceHistory.map(e=>`<div>${new Date(e.time).toLocaleString()}: €${e.balance.toFixed(2)}</div>`).join("");
-}
-setBalanceBtn.onclick=()=>{
-  const val=parseFloat(newBalanceInput.value);
-  if(isNaN(val))return alert("Bitte gültigen Wert eingeben");
-  const user=getActiveUser();if(!user)return;
-  user.balance=val;
-  user.balanceHistory.push({time:Date.now(),balance:val});
-  saveState();renderOverview();
-  newBalanceInput.value="";
-}
+    function loadTrades(){return JSON.parse(localStorage.getItem('trades')||'[]');}
+    function saveTrades(trades){localStorage.setItem('trades',JSON.stringify(trades));}
+    function calcPnLEuro(t){
+      const {direction,entry,exit,leverage,size}=t;
+      return (direction==='long'
+        ? ((exit-entry)/entry)*leverage*size
+        : ((entry-exit)/entry)*leverage*size);
+    }
 
-// ===== TRADING LOG =====
-const tradeForm=document.getElementById("tradeForm");
-const tradeHistoryDiv=document.getElementById("tradeHistory");
-function renderTrades(){
-  const u=getActiveUser();if(!u)return;
-  if(u.trades.length===0){tradeHistoryDiv.innerHTML="<p>Keine Trades vorhanden</p>";return;}
-  let html=`<table><thead><tr><th>Datum</th><th>Symbol</th><th>Side</th><th>Entry</th><th>Exit</th><th>Size</th><th>PnL</th><th>PnL%</th><th>Aktion</th></tr></thead><tbody>`;
-  u.trades.slice().reverse().forEach((t,idx)=>{
-    const color=t.pnl>=0?"green":"red";
-    const d=new Date(t.time).toLocaleString();
-    html+=`<tr>
-      <td>${d}</td>
-      <td>${t.symbol}</td>
-      <td>${t.side}</td>
-      <td>${t.entry}</td>
-      <td>${t.exit}</td>
-      <td>${t.size}</td>
-      <td class="value ${color}">${t.pnl.toFixed(2)}</td>
-      <td class="value ${color}">${t.pnlPerc.toFixed(2)}</td>
-      <td><button onclick="editTrade(${u.trades.length-1-idx})">✎</button> <button onclick="deleteTrade(${u.trades.length-1-idx})">🗑</button></td>
-    </tr>`;
-  });
-  html+="</tbody></table>";tradeHistoryDiv.innerHTML=html;
-}
-tradeForm.onsubmit=(e)=>{
-  e.preventDefault();
-  const u=getActiveUser();if(!u)return alert("Kein aktiver User");
-  const s=document.getElementById("tradeSymbol").value;
-  const side=document.getElementById("tradeSide").value;
-  const entry=parseFloat(document.getElementById("entryPrice").value);
-  const exit=parseFloat(document.getElementById("exitPrice").value);
-  const size=parseFloat(document.getElementById("tradeSize").value);
-  const note=document.getElementById("tradeNote").value;
-  const pnl=(side==="Long")?(exit-entry)*size:(entry-exit)*size;
-  const pnlPerc=(pnl/(entry*size))*100;
-  u.trades.push({symbol:s,side,entry,exit,size,note,pnl,pnlPerc,time:Date.now()});
-  u.balance=0; u.trades.forEach(tr=>u.balance+=tr.pnl);u.balanceHistory.push({time:Date.now(),balance:u.balance}); saveState();
-  renderOverview();renderTrades(); tradeForm.reset();
-}
-function deleteTrade(idx){const u=getActiveUser();if(!u)return;u.trades.splice(idx,1);saveState();renderOverview();renderTrades();}
-function editTrade(idx){const u=getActiveUser();if(!u)return; const t=u.trades[idx]; const newExit=prompt("Neuer Exit Preis:",t.exit);if(newExit===null)return; const exit=parseFloat(newExit);if(isNaN(exit))return alert("Ungültiger Wert"); t.exit=exit; t.pnl=(t.side==="Long")?(exit-t.entry)*t.size:(t.entry-exit)*t.size; t.pnlPerc=(t.pnl/(t.entry*t.size))*100; t.time=Date.now(); u.balance=0; u.trades.forEach(tr=>u.balance+=tr.pnl); saveState();renderOverview();renderTrades();}
+    function renderTrades(){
+      const trades=loadTrades();
+      tradesTableBody.innerHTML='';
+      trades.forEach((t,index)=>{
+        const pnl=calcPnLEuro(t);
+        const tr=document.createElement('tr');
+        tr.innerHTML=`
+          <td>${t.date}</td>
+          <td>${t.symbol}</td>
+          <td>${t.size.toFixed(2)}</td>
+          <td>${t.entry}</td>
+          <td>${t.exit}</td>
+          <td>${t.direction}</td>
+          <td>${t.leverage}</td>
+          <td class="${pnl>=0?'pnl-positive':'pnl-negative'}">${pnl.toFixed(2)} €</td>
+          <td><button class="delete-btn" data-index="${index}">Löschen</button></td>`;
+        tradesTableBody.appendChild(tr);
+      });
 
-// ===== CALCULATOR =====
-const calcBtn=document.getElementById("calcBtn");
-const resetBtn=document.getElementById("resetBtn");
-calcBtn.onclick=()=>{
-  const account=parseFloat(document.getElementById("account").value);
-  const riskPercent=parseFloat(document.getElementById("riskPercent").value)/100;
-  const leverage=parseFloat(document.getElementById("leverage").value);
-  const stopLoss=parseFloat(document.getElementById("stopLoss").value)/100;
-  const rtr=parseFloat(document.getElementById("rtr").value);
+      document.querySelectorAll('.delete-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          const idx=parseInt(btn.dataset.index);
+          const trades=loadTrades();
+          trades.splice(idx,1);
+          saveTrades(trades);
+          renderTrades();
+          updateChart();
+        });
+      });
+    }
 
-  const maxRisk=account*riskPercent;
-  const position=maxRisk/stopLoss*leverage;
-  const margin=position/leverage;
-  const exposure=position;
-  const tp=maxRisk*rtr/stopLoss;
+    tradeForm.addEventListener('submit',e=>{
+      e.preventDefault();
+      const symbol=document.getElementById('symbol').value.trim();
+      const size=parseFloat(document.getElementById('size').value);
+      const entry=parseFloat(document.getElementById('entry').value);
+      const exit=parseFloat(document.getElementById('exit').value);
+      const direction=document.getElementById('direction').value;
+      const leverage=parseFloat(document.getElementById('leverage').value);
+      const date=new Date().toLocaleDateString(); // Tagesdatum
+      const newTrade={symbol,size,entry,exit,direction,leverage,date};
+      const trades=loadTrades();
+      trades.push(newTrade);
+      saveTrades(trades);
+      renderTrades();
+      tradeForm.reset();
+      updateChart();
+    });
 
-  document.getElementById("riskMoney").textContent=maxRisk.toFixed(2);
-  document.getElementById("positionSize").textContent=position.toFixed(2);
-  document.getElementById("marginReq").textContent=margin.toFixed(2);
-  document.getElementById("exposure").textContent=exposure.toFixed(2);
-  document.getElementById("tpValue").textContent=tp.toFixed(2);
-  document.getElementById("explainLine").textContent=`Account €${account}, Risk ${riskPercent*100}%, Leverage ${leverage}x, SL ${stopLoss*100}%, Positionsgröße ${position.toFixed(2)}, Marge ${margin.toFixed(2)}, TP €${tp.toFixed(2)} (R:R ${rtr})`;
-}
-resetBtn.onclick=()=>{
-  document.getElementById("account").value=10000;
-  document.getElementById("riskPercent").value=0.6;
-  document.getElementById("leverage").value=2;
-  document.getElementById("stopLoss").value=0.8;
-  document.getElementById("rtr").value=2.0;
-  document.getElementById("riskMoney").textContent="-";
-  document.getElementById("positionSize").textContent="-";
-  document.getElementById("marginReq").textContent="-";
-  document.getElementById("exposure").textContent="-";
-  document.getElementById("tpValue").textContent="-";
-  document.getElementById("explainLine").textContent="Erklärung erscheint hier nach Berechnen.";
-}
+    clearAllBtn.addEventListener('click',()=>{
+      if(confirm("Willst du wirklich alle Trades löschen?")){
+        localStorage.removeItem('trades');
+        renderTrades();
+        updateChart();
+      }
+    });
 
-// ===== INIT =====
-loadState();
-if(!getActiveUser()){createUser("Demo"); setActiveUser("Demo");}
-renderActiveUser();
-renderOverview();
-renderTrades();
-</script>
+    renderTrades();
+
+    // === Dashboard: Chart & Startkapital ===
+    const startForm=document.getElementById('startForm');
+    const startBalanceInput=document.getElementById('startBalance');
+    let accountChart;
+
+    function loadStartBalance(){
+      return parseFloat(localStorage.getItem('startBalance')||'0');
+    }
+    function saveStartBalance(val){
+      localStorage.setItem('startBalance',val);
+    }
+
+    startForm.addEventListener('submit',e=>{
+      e.preventDefault();
+      const val=parseFloat(startBalanceInput.value);
+      if(!isNaN(val)){saveStartBalance(val);updateChart();}
+    });
+
+    function getAccountHistory(){
+      const trades=loadTrades();
+      const dailyPnL={};
+      trades.forEach(t=>{
+        const pnl=calcPnLEuro(t);
+        dailyPnL[t.date]=(dailyPnL[t.date]||0)+pnl;
+      });
+      const sortedDates=Object.keys(dailyPnL).sort((a,b)=>new Date(a)-new Date(b));
+      const history=[];
+      let balance=loadStartBalance();
+      history.push({date:'Start',value:balance});
+      sortedDates.forEach(d=>{
+        balance+=dailyPnL[d];
+        history.push({date:d,value:balance});
+      });
+      return history;
+    }
+
+    function updateChart(){
+      const ctx=document.getElementById('accountChart');
+      const history=getAccountHistory();
+      if(!history.length||!ctx)return;
+      const labels=history.map(h=>h.date);
+      const data=history.map(h=>h.value.toFixed(2));
+
+      if(accountChart)accountChart.destroy();
+      accountChart=new Chart(ctx,{
+        type:'line',
+        data:{
+          labels:labels,
+          datasets:[{
+            label:'Kontoverlauf (€)',
+            data:data,
+            borderColor:'rgba(43,140,255,1)',
+            backgroundColor:'rgba(43,140,255,0.1)',
+            fill:true,
+            tension:0.25
+          }]
+        },
+        options:{
+          scales:{
+            y:{beginAtZero:false}
+          },
+          plugins:{
+            legend:{display:false}
+          }
+        }
+      });
+      startBalanceInput.value=loadStartBalance()||'';
+    }
+
+    updateChart();
+  </script>
 </body>
 </html>
 <script></script>
