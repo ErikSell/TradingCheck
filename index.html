@@ -14,7 +14,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Trading Tracker</title>
-
   <style>
     :root{
       --bg:#ffffff;
@@ -28,18 +27,10 @@
       --shadow:0 6px 18px rgba(15,15,15,0.04);
       font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
     }
-
     *{box-sizing:border-box}
-    body{
-      margin:0;
-      background:linear-gradient(180deg,var(--bg),#fbfbfc);
-      color:var(--text);
-      font-size:15px;
-      line-height:1.45;
-    }
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#fbfbfc);color:var(--text);font-size:15px;line-height:1.45;}
     .container{width:calc(100% - 32px);max-width:var(--max-width);margin:0 auto;padding:20px 16px;}
 
-    /* Navigation */
     .topbar{border-bottom:1px solid #ececec;background:var(--bg);position:sticky;top:0;z-index:30;}
     .topbar-inner{display:flex;align-items:center;justify-content:space-between;}
     .brand{display:flex;align-items:center;gap:10px;}
@@ -60,14 +51,12 @@
     .card.full{grid-column:1/-1;}
     .site-footer{border-top:1px solid #ececec;margin-top:40px;padding:18px 0;text-align:center;color:var(--muted);font-size:13px;}
 
-    /* Formular */
     form{display:grid;gap:10px;max-width:600px;margin-top:10px;}
     label{font-weight:600;font-size:14px;}
     input,select,button{padding:8px 10px;border-radius:6px;border:1px solid #ccc;font-size:14px;}
     button{background:var(--accent);color:white;border:none;cursor:pointer;transition:0.2s;}
     button:hover{opacity:0.9}
 
-    /* Tabelle */
     table{width:100%;border-collapse:collapse;margin-top:20px;font-size:14px;}
     th,td{border-bottom:1px solid #ddd;padding:8px;text-align:center;}
     th{background:var(--surface);}
@@ -79,6 +68,11 @@
     .clear-btn{background:#999;color:white;border:none;padding:6px 10px;border-radius:6px;margin-top:10px;cursor:pointer;}
     .clear-btn:hover{opacity:0.85}
 
+    .chart-controls{margin-top:15px;margin-bottom:10px;}
+    .chart-controls button{
+      background:#e5e9ef;color:var(--text);border:none;padding:6px 10px;border-radius:6px;margin-right:6px;cursor:pointer;
+    }
+    .chart-controls button.active{background:var(--accent);color:white;}
     #accountChart{width:100%;max-width:800px;margin-top:20px;}
   </style>
 </head>
@@ -86,7 +80,7 @@
   <header class="topbar">
     <div class="container topbar-inner">
       <div class="brand">
-        <svg class="logo" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12l4-8 4 16 4-8 4 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="logo" viewBox="0 0 24 24"><path d="M3 12l4-8 4 16 4-8 4 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="brand-name">Trading Tracker</span>
       </div>
       <ul class="nav-list">
@@ -110,6 +104,13 @@
           </label>
           <button type="submit">Speichern</button>
         </form>
+
+        <div class="chart-controls">
+          <button data-range="daily" class="active">Daily</button>
+          <button data-range="weekly">Weekly</button>
+          <button data-range="monthly">Monthly</button>
+        </div>
+
         <canvas id="accountChart"></canvas>
       </div>
     </section>
@@ -118,7 +119,6 @@
     <section id="trades" class="tab-panel hidden">
       <h1>Trades</h1>
       <p class="lead">Trage deine Trades ein – sie werden lokal gespeichert.</p>
-
       <div class="card full">
         <h3>Neuer Trade</h3>
         <form id="tradeForm">
@@ -141,15 +141,8 @@
         <table id="tradesTable">
           <thead>
             <tr>
-              <th>Datum</th>
-              <th>Symbol</th>
-              <th>Größe (€)</th>
-              <th>Entry</th>
-              <th>Exit</th>
-              <th>Richtung</th>
-              <th>Leverage</th>
-              <th>PnL (€)</th>
-              <th>Aktion</th>
+              <th>Datum</th><th>Symbol</th><th>Größe (€)</th><th>Entry</th><th>Exit</th>
+              <th>Richtung</th><th>Leverage</th><th>PnL (€)</th><th>Aktion</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -174,33 +167,26 @@
     </div>
   </footer>
 
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <script>
-    // === Grundlegende UI Navigation ===
+    // Navigation
     const navLinks=document.querySelectorAll('.nav-link');
     const panels=document.querySelectorAll('.tab-panel');
     const yearEl=document.getElementById('year');
     if(yearEl)yearEl.textContent=new Date().getFullYear();
-
     function showTab(id){
       panels.forEach(p=>p.classList.toggle('hidden',p.id!==id));
       navLinks.forEach(a=>a.classList.toggle('active',a.dataset.tab===id));
       if(id==='dashboard') updateChart();
     }
-    navLinks.forEach(a=>{
-      a.addEventListener('click',e=>{
-        e.preventDefault();
-        const t=a.dataset.tab;
-        history.replaceState(null,'',`#${t}`);
-        showTab(t);
-      });
-    });
+    navLinks.forEach(a=>a.addEventListener('click',e=>{
+      e.preventDefault();const t=a.dataset.tab;
+      history.replaceState(null,'',`#${t}`);showTab(t);
+    }));
     window.addEventListener('hashchange',()=>showTab(location.hash.replace('#','')||'dashboard'));
     showTab(location.hash.replace('#','')||'dashboard');
 
-    // === Trades ===
+    // Trade functions
     const tradeForm=document.getElementById('tradeForm');
     const tradesTableBody=document.querySelector('#tradesTable tbody');
     const clearAllBtn=document.getElementById('clearAll');
@@ -209,42 +195,27 @@
     function saveTrades(trades){localStorage.setItem('trades',JSON.stringify(trades));}
     function calcPnLEuro(t){
       const {direction,entry,exit,leverage,size}=t;
-      return (direction==='long'
-        ? ((exit-entry)/entry)*leverage*size
-        : ((entry-exit)/entry)*leverage*size);
+      return (direction==='long'?((exit-entry)/entry):((entry-exit)/entry))*leverage*size;
     }
-
     function renderTrades(){
-      const trades=loadTrades();
-      tradesTableBody.innerHTML='';
-      trades.forEach((t,index)=>{
+      const trades=loadTrades(); tradesTableBody.innerHTML='';
+      trades.forEach((t,i)=>{
         const pnl=calcPnLEuro(t);
         const tr=document.createElement('tr');
-        tr.innerHTML=`
-          <td>${t.date}</td>
-          <td>${t.symbol}</td>
-          <td>${t.size.toFixed(2)}</td>
-          <td>${t.entry}</td>
-          <td>${t.exit}</td>
-          <td>${t.direction}</td>
-          <td>${t.leverage}</td>
+        tr.innerHTML=`<td>${t.date}</td><td>${t.symbol}</td><td>${t.size.toFixed(2)}</td>
+          <td>${t.entry}</td><td>${t.exit}</td><td>${t.direction}</td><td>${t.leverage}</td>
           <td class="${pnl>=0?'pnl-positive':'pnl-negative'}">${pnl.toFixed(2)} €</td>
-          <td><button class="delete-btn" data-index="${index}">Löschen</button></td>`;
+          <td><button class="delete-btn" data-index="${i}">Löschen</button></td>`;
         tradesTableBody.appendChild(tr);
       });
-
       document.querySelectorAll('.delete-btn').forEach(btn=>{
         btn.addEventListener('click',()=>{
           const idx=parseInt(btn.dataset.index);
           const trades=loadTrades();
-          trades.splice(idx,1);
-          saveTrades(trades);
-          renderTrades();
-          updateChart();
+          trades.splice(idx,1);saveTrades(trades);renderTrades();updateChart();
         });
       });
     }
-
     tradeForm.addEventListener('submit',e=>{
       e.preventDefault();
       const symbol=document.getElementById('symbol').value.trim();
@@ -253,90 +224,106 @@
       const exit=parseFloat(document.getElementById('exit').value);
       const direction=document.getElementById('direction').value;
       const leverage=parseFloat(document.getElementById('leverage').value);
-      const date=new Date().toLocaleDateString(); // Tagesdatum
+      const date=new Date().toLocaleDateString('de-DE');
       const newTrade={symbol,size,entry,exit,direction,leverage,date};
-      const trades=loadTrades();
-      trades.push(newTrade);
-      saveTrades(trades);
-      renderTrades();
-      tradeForm.reset();
-      updateChart();
+      const trades=loadTrades(); trades.push(newTrade);
+      saveTrades(trades);renderTrades();tradeForm.reset();updateChart();
     });
-
     clearAllBtn.addEventListener('click',()=>{
       if(confirm("Willst du wirklich alle Trades löschen?")){
-        localStorage.removeItem('trades');
-        renderTrades();
-        updateChart();
+        localStorage.removeItem('trades');renderTrades();updateChart();
       }
     });
-
     renderTrades();
 
-    // === Dashboard: Chart & Startkapital ===
+    // Dashboard & Chart
     const startForm=document.getElementById('startForm');
     const startBalanceInput=document.getElementById('startBalance');
-    let accountChart;
+    const rangeButtons=document.querySelectorAll('.chart-controls button');
+    let accountChart; let currentRange='daily';
 
-    function loadStartBalance(){
-      return parseFloat(localStorage.getItem('startBalance')||'0');
-    }
-    function saveStartBalance(val){
-      localStorage.setItem('startBalance',val);
-    }
-
+    function loadStartBalance(){return parseFloat(localStorage.getItem('startBalance')||'0');}
+    function saveStartBalance(val){localStorage.setItem('startBalance',val);}
     startForm.addEventListener('submit',e=>{
       e.preventDefault();
       const val=parseFloat(startBalanceInput.value);
       if(!isNaN(val)){saveStartBalance(val);updateChart();}
     });
 
+    rangeButtons.forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        rangeButtons.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        currentRange=btn.dataset.range;
+        updateChart();
+      });
+    });
+
+    function groupDate(date,mode){
+      const d=new Date(date);
+      if(mode==='weekly'){
+        const week=Math.ceil(((d - new Date(d.getFullYear(),0,1))/86400000 + d.getDay()+1)/7);
+        return `${d.getFullYear()}-W${week}`;
+      }else if(mode==='monthly'){
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      }
+      return d.toLocaleDateString('de-DE');
+    }
+
     function getAccountHistory(){
       const trades=loadTrades();
-      const dailyPnL={};
-      trades.forEach(t=>{
-        const pnl=calcPnLEuro(t);
-        dailyPnL[t.date]=(dailyPnL[t.date]||0)+pnl;
-      });
-      const sortedDates=Object.keys(dailyPnL).sort((a,b)=>new Date(a)-new Date(b));
+      const startBal=loadStartBalance();
+      if(!trades.length||!startBal) return [];
+      let balance=startBal;
       const history=[];
-      let balance=loadStartBalance();
-      history.push({date:'Start',value:balance});
-      sortedDates.forEach(d=>{
-        balance+=dailyPnL[d];
-        history.push({date:d,value:balance});
+
+      trades.sort((a,b)=>new Date(a.date)-new Date(b.date)).forEach(t=>{
+        const pnl=calcPnLEuro(t);
+        balance+=pnl;
+        history.push({date:new Date(t.date),balance});
       });
       return history;
     }
 
+    function getGroupedHistory(range){
+      const raw=getAccountHistory();
+      if(!raw.length) return [];
+      const grouped={};
+      raw.forEach(h=>{
+        const key=groupDate(h.date,range);
+        grouped[key]=h.balance;
+      });
+      return Object.keys(grouped).sort((a,b)=>new Date(a)-new Date(b))
+        .map(k=>({date:k,balance:grouped[k]}));
+    }
+
     function updateChart(){
       const ctx=document.getElementById('accountChart');
-      const history=getAccountHistory();
-      if(!history.length||!ctx)return;
-      const labels=history.map(h=>h.date);
-      const data=history.map(h=>h.value.toFixed(2));
+      const history=getGroupedHistory(currentRange);
+      if(!ctx) return;
+      if(accountChart) accountChart.destroy();
+      if(!history.length){ctx.innerHTML="";return;}
 
-      if(accountChart)accountChart.destroy();
+      const labels=history.map(h=>h.date);
+      const data=history.map(h=>h.balance.toFixed(2));
+
       accountChart=new Chart(ctx,{
         type:'line',
         data:{
-          labels:labels,
+          labels,
           datasets:[{
             label:'Kontoverlauf (€)',
-            data:data,
+            data,
             borderColor:'rgba(43,140,255,1)',
             backgroundColor:'rgba(43,140,255,0.1)',
             fill:true,
-            tension:0.25
+            pointRadius:4,
+            tension:0.3
           }]
         },
         options:{
-          scales:{
-            y:{beginAtZero:false}
-          },
-          plugins:{
-            legend:{display:false}
-          }
+          scales:{y:{beginAtZero:false}},
+          plugins:{legend:{display:false}}
         }
       });
       startBalanceInput.value=loadStartBalance()||'';
